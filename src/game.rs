@@ -104,6 +104,23 @@ struct Game {
     destroyed: [Option<u8>; 4],
 }
 
+const BRICKS_POS: [(u8, u8); 140] = {
+    let mut pos = [(0u8, 0u8); 140];
+
+    let mut brick_index = 0;
+    while brick_index < 140 {
+        let i = brick_index as u8;
+        let brick_y = i / BRICKS_WIDE as u8;
+        let brick_x = i % BRICKS_WIDE as u8;
+        let brick_y = (brick_y * BRICK_HEIGHT) + (TOP_BRICK_MARGIN as u8 * BRICK_HEIGHT);
+        let brick_x = (brick_x as u16 * BRICK_WIDTH as u16) as u8;
+        pos[brick_index] = (brick_x, brick_y);
+
+        brick_index += 1;
+    }
+    pos
+};
+
 impl Game {
     fn new() -> Self {
         let mut game = Self {
@@ -133,11 +150,7 @@ impl Game {
         // brick collision
         for (i, brick) in self.bricks.iter_mut().enumerate() {
             if *brick != Brick::Empty {
-                let i = i as u8;
-                let brick_y = i / BRICKS_WIDE as u8;
-                let brick_x = i % BRICKS_WIDE as u8;
-                let brick_y = (brick_y * BRICK_HEIGHT) + (TOP_BRICK_MARGIN as u8 * BRICK_HEIGHT);
-                let brick_x = (brick_y * BRICK_WIDTH);
+                let (brick_x, brick_y) = BRICKS_POS[i];
 
                 if self.ball.y > brick_y && self.ball.y < brick_y + BRICK_HEIGHT &&
                 self.ball.x >= brick_x && self.ball.x <= brick_x + BRICK_WIDTH {
@@ -147,7 +160,7 @@ impl Game {
                         .position(|&item| item == None)
                         .unwrap_or(0);
 
-                    self.destroyed[pos] = Some(i);
+                    self.destroyed[pos] = Some(i as u8);
                     self.ball.dy = -self.ball.dy;
                     apu::play_sfx(apu::Sfx::MenuBoop);
                 }
@@ -165,57 +178,3 @@ impl Game {
         }
     }
 }
-
-// struct Brick { x: u8, y: u8, width: u8, height: u8, is_destroyed: bool }
-// struct Game { ball: Ball, paddle: Paddle, bricks: Vec<Brick> }
-
-// impl Game {
-//     fn new() -> Game {
-//         let mut bricks = Vec::new();
-//         for i in 0..50 {
-//             for j in 0..30 {
-//                 bricks.push(Brick { x: i * 8 + 1, y: j * 3 + 1, width: 6, height: 2, is_destroyed: false });
-//             }
-//         }
-//         Game {
-//             ball: ,
-//             paddle: Paddle { x: 36, y: 48, width: 8, height: 1 },
-//             bricks: bricks
-//         }
-//     }
-
-//     fn update(&mut self) {
-//         self.ball.x = (self.ball.x as i8 + self.ball.dx) as u8;
-//         self.ball.y = (self.ball.y as i8 + self.ball.dy) as u8;
-
-//         // Paddle collision
-//         if self.ball.y >= self.paddle.y && self.ball.y <= self.paddle.y + self.paddle.height &&
-//             self.ball.x >= self.paddle.x && self.ball.x <= self.paddle.x + self.paddle.width {
-//                 self.ball.dy = -self.ball.dy;
-//         }
-
-//         // Brick collision
-//         let mut destroyed = HashSet::new();
-//         for (i, brick) in self.bricks.iter().enumerate() {
-//             if !brick.is_destroyed &&
-//                 self.ball.y >= brick.y && self.ball.y <= brick.y + brick.height &&
-//                 self.ball.x >= brick.x && self.ball.x <= brick.x + brick.width {
-//                     destroyed.insert(i);
-//                     self.ball.dy = -self.ball.dy;
-//             }
-//         }
-
-//         // Remove destroyed bricks
-//         for i in destroyed {
-//             self.bricks[i].is_destroyed = true;
-//         }
-
-//         // Screen collision
-//         if self.ball.x == 0 || self.ball.x == 79 {
-//             self.ball.dx = -self.ball.dx;
-//         }
-//         if self.ball.y == 0 {
-//             self.ball.dy = -self.ball.dy;
-//         }
-//     }
-// }
