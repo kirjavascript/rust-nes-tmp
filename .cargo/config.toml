@@ -1,0 +1,12 @@
+[build]
+target = "mos-nes-cnrom-none"
+
+[target.mos-nes-cnrom-none]
+rustflags = [
+    "-C", "link-arg=-Tsrc/link.ld",
+    "-C", "link-arg=-Wl,--verbose",
+    # export RUSTC_LOG=rustc_codegen_ssa::back::link=info
+]
+
+[unstable]
+build-std = ["core", "alloc"]

@@ -1,0 +1,24 @@
+[package]
+name = "brickgame"
+version = "0.2.0"
+edition = "2021"
+
+[profile.release]
+opt-level = 3
+lto = true
+debug = false
+debug-assertions = false
+panic = "abort"
+codegen-units = 1
+
+[build-dependencies]
+cc = { version = "1.0"}
+
+[dependencies]
+numtoa = "0.2.4"
+
+[features]
+skip-legal = []
+stress = []
+debug = []
+tas-compat = []
