@@ -11,6 +11,15 @@ pub fn _set_chr_bank(bank: u8) {
     unsafe { *(0x8000 as *mut u8) = bank; }
 }
 
+pub const Right: u8 = 0x01;
+pub const Left: u8 = 0x02;
+pub const Down: u8 = 0x04;
+pub const Up: u8 = 0x08;
+pub const Start: u8 = 0x10;
+pub const Select: u8 = 0x20;
+pub const B: u8 = 0x40;
+pub const A: u8 = 0x80;
+
 static JOYPAD1: u16 = 0x4016;
 static mut BUTTONS: u8 = 0;
 
