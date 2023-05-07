@@ -148,8 +148,17 @@ impl Game {
     }
 
     fn step(&mut self) {
-
         let buttons = io::controller_buttons();
+
+        if self.ball.dy == 0 {
+            // dead
+            if buttons & io::START != 0 {
+                ppu::disable_nmi();
+                init();
+                ppu::enable_nmi();
+            }
+            return
+        }
 
         if buttons & io::LEFT != 0 && self.paddle.x > 1 {
             self.paddle.x -= 2;
@@ -189,9 +198,8 @@ impl Game {
                     let hit_bottom = dist_bottom < r;
 
                     if hit_left || hit_right {
-                        // self.ball.dx = -self.ball.dx;
-                    }
-                    if hit_top || hit_bottom {
+                        self.ball.dx = -self.ball.dx;
+                    } else if hit_top || hit_bottom {
                         self.ball.dy = -self.ball.dy;
                     }
 
@@ -220,7 +228,7 @@ impl Game {
         }
         // paddle collision
         if self.ball.y + BALL_DIAMETER >= self.paddle.y {
-            if self.ball.x > self.paddle.x && self.ball.x + BALL_DIAMETER < self.paddle.x + (self.paddle.width * 8) {
+            if self.ball.x + BALL_RADIUS > self.paddle.x && self.ball.x + BALL_RADIUS < self.paddle.x + (self.paddle.width * 8) {
                 self.ball.dy = -self.ball.dy;
                 apu::play_sfx(apu::Sfx::Lock);
             } else {

@@ -1,33 +1,32 @@
 /* default load chain */
-/* ld.lld: /usr/local/bin/../mos-platform/nes-cnrom/lib/crt0.o */
-/* ld.lld: /usr/local/bin/../mos-platform/nes/lib/libcrt0.a */
-/* ld.lld: /usr/local/bin/../mos-platform/common/lib/libcrt.a */
-/* ld.lld: /usr/local/bin/../mos-platform/common/lib/libc.a */
-/* ld.lld: /usr/local/bin/../mos-platform/nes-cnrom/lib/link.ld */
-/* ld.lld: /usr/local/bin/../mos-platform/nes-cnrom/lib/common.ld */
-/* ld.lld: /usr/local/bin/../mos-platform/nes/lib/nes.ld */
-/* ld.lld: /usr/local/bin/../mos-platform/common/lib/imag-regs.ld */
-/* ld.lld: /usr/local/bin/../mos-platform/common/lib/text-sections.ld */
-/* ld.lld: /usr/local/bin/../mos-platform/common/lib/rodata-sections.ld */
-/* ld.lld: /usr/local/bin/../mos-platform/common/lib/data-sections.ld */
-/* ld.lld: /usr/local/bin/../mos-platform/common/lib/zp-data-sections.ld */
-/* ld.lld: /usr/local/bin/../mos-platform/common/lib/zp-bss-sections.ld */
-/* ld.lld: /usr/local/bin/../mos-platform/common/lib/zp-bss-symbols.ld */
-/* ld.lld: /usr/local/bin/../mos-platform/common/lib/zp-noinit.ld */
-/* ld.lld: /usr/local/bin/../mos-platform/common/lib/zp-noinit-sections.ld */
-/* ld.lld: /usr/local/bin/../mos-platform/common/lib/bss-sections.ld */
-/* ld.lld: /usr/local/bin/../mos-platform/common/lib/bss-symbols.ld */
-/* ld.lld: /usr/local/bin/../mos-platform/common/lib/noinit-sections.ld */
-/* ld.lld: /usr/local/bin/../mos-platform/nes/lib/prg-ram-fixed.ld */
-/* ld.lld: /usr/local/bin/../mos-platform/nes/lib/prg-rom-fixed.ld */
-/* ld.lld: /usr/local/bin/../mos-platform/nes/lib/dpcm.ld */
-/* ld.lld: /usr/local/bin/../mos-platform/nes/lib/ines.ld */
-/* ld.lld: /usr/local/bin/../mos-platform/nes/lib/ines-header.ld */
-/* ld.lld: /usr/local/bin/../mos-platform/nes/lib/ines-roms.ld */
-/* ld.lld: /usr/local/bin/../mos-platform/nes/lib/c-in-ram.ld */
+/* ld.lld: .../mos-platform/nes-cnrom/lib/crt0.o */
+/* ld.lld: .../mos-platform/nes/lib/libcrt0.a */
+/* ld.lld: .../mos-platform/common/lib/libcrt.a */
+/* ld.lld: .../mos-platform/common/lib/libc.a */
+/* ld.lld: .../mos-platform/nes-cnrom/lib/link.ld */
+/* ld.lld: .../mos-platform/nes-cnrom/lib/common.ld */
+/* ld.lld: .../mos-platform/nes/lib/nes.ld */
+/* ld.lld: .../mos-platform/common/lib/imag-regs.ld */
+/* ld.lld: .../mos-platform/common/lib/text-sections.ld */
+/* ld.lld: .../mos-platform/common/lib/rodata-sections.ld */
+/* ld.lld: .../mos-platform/common/lib/data-sections.ld */
+/* ld.lld: .../mos-platform/common/lib/zp-data-sections.ld */
+/* ld.lld: .../mos-platform/common/lib/zp-bss-sections.ld */
+/* ld.lld: .../mos-platform/common/lib/zp-bss-symbols.ld */
+/* ld.lld: .../mos-platform/common/lib/zp-noinit.ld */
+/* ld.lld: .../mos-platform/common/lib/zp-noinit-sections.ld */
+/* ld.lld: .../mos-platform/common/lib/bss-sections.ld */
+/* ld.lld: .../mos-platform/common/lib/bss-symbols.ld */
+/* ld.lld: .../mos-platform/common/lib/noinit-sections.ld */
+/* ld.lld: .../mos-platform/nes/lib/prg-ram-fixed.ld */
+/* ld.lld: .../mos-platform/nes/lib/prg-rom-fixed.ld */
+/* ld.lld: .../mos-platform/nes/lib/dpcm.ld */
+/* ld.lld: .../mos-platform/nes/lib/ines.ld */
+/* ld.lld: .../mos-platform/nes/lib/ines-header.ld */
+/* ld.lld: .../mos-platform/nes/lib/ines-roms.ld */
+/* ld.lld: .../mos-platform/nes/lib/c-in-ram.ld */
 
 __chr_rom_size = 16;
-/* __prg_rom_size = 32; */
 
 /* Provide imaginary (zero page) registers. */
 __rc0 = 0x00;
@@ -54,8 +53,11 @@ ASSERT(__chr_nvram_size == 0 ||
 MEMORY {
   zp : ORIGIN = __rc31 + 1, LENGTH = 0x100 - (__rc31 + 1)
 
+  /* reserved for inline asm usage */
+  _inline_nmi: ORIGIN = 0x80, LENGTH = 1
+
   /* reserved for sprites */
-  sprites : ORIGIN = 0x0200, LENGTH = 0x0100
+  _sprites : ORIGIN = 0x0200, LENGTH = 0x0100
 
   ram : ORIGIN = 0x0300, LENGTH = 0x0500
 

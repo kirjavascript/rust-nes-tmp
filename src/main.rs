@@ -9,7 +9,7 @@ mod sprites;
 mod game;
 
 // fixed memory usage;
-// 0x80 - nmi check bit (usually free)
+// 0x80 - nmi check bit
 // 0x200 - OAM (reserved in linker)
 
 #[start]
