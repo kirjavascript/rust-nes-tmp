@@ -213,6 +213,7 @@ impl Game {
                     self.ball.x = old_x;
                     self.ball.y = old_y;
                     apu::play_sfx(apu::Sfx::MenuBoop);
+                    break;
                 }
             }
         }

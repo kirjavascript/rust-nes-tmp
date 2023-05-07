@@ -15,5 +15,4 @@ cargo rustc --release
 ## attribution
 
 * linker help https://github.com/jgouly
-* public domain font https://opengameart.org/content/intrepid-monochrome-8-bit-font
 * toolchain https://llvm-mos.org/wiki/Rust
