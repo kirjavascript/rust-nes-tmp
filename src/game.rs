@@ -151,9 +151,9 @@ impl Game {
 
         let buttons = io::controller_buttons();
 
-        if buttons & io::Left != 0 && self.paddle.x > 1 {
+        if buttons & io::LEFT != 0 && self.paddle.x > 1 {
             self.paddle.x -= 2;
-        } else if buttons & io::Right != 0 {
+        } else if buttons & io::RIGHT != 0  && self.paddle.x + self.paddle.width * 8 < 0xe0 {
             self.paddle.x += 2;
         }
 
@@ -189,7 +189,7 @@ impl Game {
                     let hit_bottom = dist_bottom < r;
 
                     if hit_left || hit_right {
-                        self.ball.dx = -self.ball.dx;
+                        // self.ball.dx = -self.ball.dx;
                     }
                     if hit_top || hit_bottom {
                         self.ball.dy = -self.ball.dy;
@@ -214,16 +214,20 @@ impl Game {
             self.ball.dx = -self.ball.dx;
             apu::play_sfx(apu::Sfx::Lock);
         }
-        if self.ball.y == 0 || self.ball.y + BALL_DIAMETER >= HEIGHT {
+        if self.ball.y == 0  {
             self.ball.dy = -self.ball.dy;
             apu::play_sfx(apu::Sfx::Lock);
         }
+        // paddle collision
+        if self.ball.y + BALL_DIAMETER >= self.paddle.y {
+            if self.ball.x > self.paddle.x && self.ball.x + BALL_DIAMETER < self.paddle.x + (self.paddle.width * 8) {
+                self.ball.dy = -self.ball.dy;
+                apu::play_sfx(apu::Sfx::Lock);
+            } else {
+                self.ball.dx = 0;
+                self.ball.dy = 0;
+                apu::play_sfx(apu::Sfx::Topout);
+            }
+        }
     }
 }
-
-
-//         // Paddle collision
-//         if self.ball.y >= self.paddle.y && self.ball.y <= self.paddle.y + self.paddle.height &&
-//             self.ball.x >= self.paddle.x && self.ball.x <= self.paddle.x + self.paddle.width {
-//                 self.ball.dy = -self.ball.dy;
-//         }

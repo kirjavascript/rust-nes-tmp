@@ -1,6 +1,6 @@
 #![no_std]
 #![feature(start)]
-#![allow(unused_imports)]
+#![allow(unused_imports, dead_code)]
 
 mod apu;
 mod io;
